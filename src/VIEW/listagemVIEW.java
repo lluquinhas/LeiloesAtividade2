@@ -3,25 +3,28 @@ package VIEW;
 
 import Classes.ProdutosDAO;
 import Classes.ProdutosDTO;
+import Classes.conectaDAO;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 
 public class listagemVIEW extends javax.swing.JFrame {
 
     public listagemVIEW() {
         initComponents();
-        //preencheTabela();
+        this.preencherTabela("");
     }
    
    
-     private List<ProdutosDAO> buscaDados() {
+     /*private List<ProdutosDAO> buscaDados() {
         ProdutosDAO dao = new ProdutosDAO();
         List<ProdutosDAO> produtos = dao.listar(txtVenderProduto.getText());
         return produtos;
-    }
+    }*/
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -149,24 +152,33 @@ public class listagemVIEW extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-     public void preencheTabela(List<ProdutosDTO> produtos) {
-        String columns[] = {"Id", "Nome", "Valor", "Status"};
-        String dados[][] = new String[produtos.size()][columns.length];
+     private void preencherTabela(String filtro) {
 
-        int i = 0;
-        for (ProdutosDTO d : produtos) {
-            dados[i] = new String[]{
-                d.getId(),
-                d.getNome(),
-                d.getValor(),
-                d.getStatus()
-            };
-            i++;
+        ProdutosDAO produtosD = new ProdutosDAO();
+        conectaDAO dao = new conectaDAO();
+        boolean status = dao.conectar();
+        if (status == false) {
+            JOptionPane.showMessageDialog(null, "Erro de conexão");
+        } else {
+
+            List<ProdutosDTO> listaProdutos = produtosD.listagem(filtro);
+
+            DefaultTableModel tabelaProdutos = (DefaultTableModel) tblProdutos.getModel();
+            tblProdutos.setRowSorter(new TableRowSorter(tabelaProdutos));
+            tabelaProdutos.setNumRows(0);
+
+            for (ProdutosDTO p : listaProdutos) {
+                Object[] obj = new Object[]{
+                    p.getId(), 
+                    p.getNome(), 
+                    p.getValor(), 
+                    p.getStatus(),
+                };
+                tabelaProdutos.addRow(obj);
+            }
+            dao.desconectar();
         }
-
-        DefaultTableModel model = new DefaultTableModel(dados, columns);
-        tblProdutos.setModel(model);
-    }
+     }
     
     
     /**
