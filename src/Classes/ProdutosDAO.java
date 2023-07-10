@@ -37,18 +37,19 @@ public class ProdutosDAO {
             return ex.getErrorCode();
         }
     }
-    
+
     public boolean venderProdutos(String id) {
         try {
             prep = conn.prepareStatement("DELETE FROM produtos WHERE id = ?");
             prep.setString(1, id);
             prep.executeUpdate();
+            String status = "A Venda";
+
             return true;
         } catch (SQLException ex) {
             return false;
         }
     }
-    
 
     public ArrayList<ProdutosDTO> listarProdutos() {
         ProdutosDTO dto = new ProdutosDTO();
@@ -87,6 +88,45 @@ public class ProdutosDAO {
             dao.desconectar();
 
         }
+    }
+
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+        ProdutosDTO dto = new ProdutosDTO();
+        conectaDAO dao = new conectaDAO();
+        int status;
+
+        String sql = "SELECT * FROM produtos WHERE id =?";
+
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+
+            // Preparar a declaração SQL
+            prep = conn.prepareStatement(sql);
+
+            // Executar a consulta e obter o resultado
+            resultset = prep.executeQuery();
+
+            //criando lista
+            List<ProdutosDTO> listaExcluir = new ArrayList<>();
+
+            // Percorrer o resultado da consulta e adicionar cada produto à lista
+            while (resultset.next()) {
+                dto.setId(resultset.getString("id"));
+                dto.setNome(resultset.getString("nome"));
+                dto.setValor(resultset.getString("valor"));
+                listaExcluir.add(dto);
+            }
+            return (ArrayList<ProdutosDTO>) listaExcluir;
+        } catch (SQLException e) {
+
+            System.out.println("Erro ao conectar: " + e.getMessage());
+            return null;
+        } finally {
+
+            // Fechar a conexão com o banco de dados
+            dao.desconectar();
+
+        }
+
     }
 
 }
