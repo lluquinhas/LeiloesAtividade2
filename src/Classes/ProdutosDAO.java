@@ -37,6 +37,18 @@ public class ProdutosDAO {
             return ex.getErrorCode();
         }
     }
+    
+    public boolean venderProdutos(String id) {
+        try {
+            prep = conn.prepareStatement("DELETE FROM produtos WHERE id = ?");
+            prep.setString(1, id);
+            prep.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            return false;
+        }
+    }
+    
 
     public ArrayList<ProdutosDTO> listarProdutos() {
         ProdutosDTO dto = new ProdutosDTO();
