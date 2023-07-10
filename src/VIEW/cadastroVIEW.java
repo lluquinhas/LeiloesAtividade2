@@ -142,37 +142,16 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        listagemVIEW listagem = new listagemVIEW();
-        ProdutosDTO dto = new ProdutosDTO();
-        conectaDAO dao = new conectaDAO();
-        boolean status;
-        int resposta;
-
-        dto.setNome(txtCadastroNome.getText());
-        dto.setValor(txtCadastroValor.getText());
-
-        dao = new conectaDAO();
-
-        status = dao.conectar();
-        if (status == false) {
-            JOptionPane.showMessageDialog(null, "Erro de conexão");
-        } else {
-            resposta = dao.salvar(dto);
-            if (resposta == 1) {
-                JOptionPane.showMessageDialog(null, "Dados incluidos com sucesso");
-                //limpar os campos
-                txtCadastroNome.setText("");
-                txtCadastroValor.setText("");
-                //posicionar o cursor para um próximo
-                txtCadastroNome.requestFocus();
-            } else if (resposta == 1062) {
-                JOptionPane.showMessageDialog(null, "Produto já foi cadastrado");
-            } else {
-                JOptionPane.showMessageDialog(null, "Erro ao tentar inserir dados");
-            }
-            
-            dao.desconectar();
-        }
+        ProdutosDTO produto = new ProdutosDTO();
+        String nome = txtCadastroNome.getText();
+        String valor = txtCadastroValor.getText();
+        String status = "A Venda";
+        produto.setNome(nome);
+        produto.setValor(valor);
+        produto.setStatus(status);
+        
+        ProdutosDAO produtodao = new ProdutosDAO();
+        produtodao.cadastrarProduto(produto);
 
     }//GEN-LAST:event_btnCadastrarActionPerformed
 

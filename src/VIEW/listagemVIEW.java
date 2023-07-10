@@ -4,7 +4,6 @@ package VIEW;
 import Classes.ProdutosDAO;
 import Classes.ProdutosDTO;
 import Classes.conectaDAO;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -16,7 +15,7 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     public listagemVIEW() {
         initComponents();
-        this.preencherTabela("");
+        listarProdutos();
     }
    
    
@@ -152,33 +151,27 @@ public class listagemVIEW extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-     private void preencherTabela(String filtro) {
-
-        ProdutosDAO produtosD = new ProdutosDAO();
-        conectaDAO dao = new conectaDAO();
-        boolean status = dao.conectar();
-        if (status == false) {
-            JOptionPane.showMessageDialog(null, "Erro de conexão");
-        } else {
-
-            List<ProdutosDTO> listaProdutos = produtosD.listagem(filtro);
-
-            DefaultTableModel tabelaProdutos = (DefaultTableModel) tblProdutos.getModel();
-            tblProdutos.setRowSorter(new TableRowSorter(tabelaProdutos));
-            tabelaProdutos.setNumRows(0);
-
-            for (ProdutosDTO p : listaProdutos) {
-                Object[] obj = new Object[]{
-                    p.getId(), 
-                    p.getNome(), 
-                    p.getValor(), 
-                    p.getStatus(),
-                };
-                tabelaProdutos.addRow(obj);
+    private void listarProdutos(){
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            
+            DefaultTableModel model = (DefaultTableModel) tblProdutos.getModel();
+            model.setNumRows(0);
+            
+            List<ProdutosDTO> lista = produtosdao.listarProdutos();
+            
+            for(int i = 0; i < lista.size(); i++){
+                model.addRow(new Object[]{
+                    lista.get(i).getId(),
+                    lista.get(i).getNome(),
+                    lista.get(i).getValor(),
+                    lista.get(i).getStatus()
+                });
             }
-            dao.desconectar();
+        } catch (Exception e) {
         }
-     }
+    
+    }
     
     
     /**
