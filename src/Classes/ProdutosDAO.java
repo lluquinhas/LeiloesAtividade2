@@ -26,9 +26,8 @@ public class ProdutosDAO {
         int status;
 
         try {
-            prep = conn.prepareStatement("INSERT INTO produtos VALUES(?,?,?,?)");
-            prep.setString(1, dto.getId());
-            prep.setString(2, dto.getNome());
+            prep = conn.prepareStatement("INSERT INTO produtos VALUES(?,?,?)");
+            prep.setString(1, dto.getNome());
             prep.setString(2, dto.getValor());
             prep.setString(3, dto.getStatus());
             status = prep.executeUpdate();
@@ -41,7 +40,7 @@ public class ProdutosDAO {
 
     public boolean venderProdutos(String id) {
         try {
-            prep = conn.prepareStatement("DELETE FROM produtos WHERE id = ?");
+            prep = conn.prepareStatement("UPDATE produtos SET status = 'Vendido' WHERE id = ?");
             prep.setString(1, id);
             prep.executeUpdate();
             return true;
@@ -59,13 +58,10 @@ public class ProdutosDAO {
 
         try ( PreparedStatement statement = conn.prepareStatement(sql)) {
 
-            // Preparar a declaração SQL
             prep = conn.prepareStatement(sql);
 
-            // Executar a consulta e obter o resultado
             resultset = prep.executeQuery();
 
-            //criando lista
             List<ProdutosDTO> lista = new ArrayList<>();
 
             // Percorrer o resultado da consulta e adicionar cada produto à lista
@@ -94,27 +90,23 @@ public class ProdutosDAO {
         conectaDAO dao = new conectaDAO();
         int status;
 
-        String sql = "SELECT * FROM produtos WHERE id =?";
+        String sql =  "SELECT * FROM produtos WHERE status = 'Vendido'";
 
         try ( PreparedStatement statement = conn.prepareStatement(sql)) {
 
-            // Preparar a declaração SQL
             prep = conn.prepareStatement(sql);
 
-            // Executar a consulta e obter o resultado
             resultset = prep.executeQuery();
 
-            //criando lista
-            List<ProdutosDTO> listaExcluir = new ArrayList<>();
+            List<ProdutosDTO> listaVendas = new ArrayList<>();
 
-            // Percorrer o resultado da consulta e adicionar cada produto à lista
             while (resultset.next()) {
                 dto.setId(resultset.getString("id"));
                 dto.setNome(resultset.getString("nome"));
                 dto.setValor(resultset.getString("valor"));
-                listaExcluir.add(dto);
+                listaVendas.add(dto);
             }
-            return (ArrayList<ProdutosDTO>) listaExcluir;
+            return (ArrayList<ProdutosDTO>) listaVendas;
         } catch (SQLException e) {
 
             System.out.println("Erro ao conectar: " + e.getMessage());

@@ -4,6 +4,11 @@
  */
 package VIEW;
 
+import Classes.ProdutosDAO;
+import Classes.ProdutosDTO;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author xbrlu
@@ -15,6 +20,7 @@ public class vendasVIEW extends javax.swing.JFrame {
      */
     public vendasVIEW() {
         initComponents();
+        listarProdutosVendidos();
     }
 
     /**
@@ -90,9 +96,32 @@ public class vendasVIEW extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
+    private void listarProdutosVendidos(){
+        try {
+            ProdutosDAO produtosdao = new ProdutosDAO();
+            
+            DefaultTableModel model = (DefaultTableModel) jtblListaVendas.getModel();
+            model.setNumRows(0);
+            
+            List<ProdutosDTO> lista = produtosdao.listarProdutosVendidos();
+            
+            for(int i = 0; i < lista.size(); i++){
+                model.addRow(new Object[]{
+                    lista.get(i).getId(),
+                    lista.get(i).getNome(),
+                    lista.get(i).getValor(),
+                });
+            }
+        } catch (Exception e) {
+        }
+    
+    }
+    
     /**
      * @param args the command line arguments
      */
+    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

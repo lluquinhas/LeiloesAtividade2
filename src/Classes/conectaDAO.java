@@ -13,8 +13,7 @@ public class conectaDAO {
     PreparedStatement st;
     ResultSet rs;
 
-   public Connection connectDB(){
-        
+   public Connection connectDB(){      
         try {
             
             conn = DriverManager.getConnection("jdbc:mysql://localhost/uc11?user=root&password=Lucaszika1877");

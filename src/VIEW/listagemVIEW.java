@@ -1,6 +1,5 @@
 package VIEW;
 
-
 import Classes.ProdutosDAO;
 import Classes.ProdutosDTO;
 import Classes.conectaDAO;
@@ -10,21 +9,18 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-
 public class listagemVIEW extends javax.swing.JFrame {
 
     public listagemVIEW() {
         initComponents();
         listarProdutos();
     }
-   
-   
-     /*private List<ProdutosDAO> buscaDados() {
+
+    /*private List<ProdutosDAO> buscaDados() {
         ProdutosDAO dao = new ProdutosDAO();
         List<ProdutosDAO> produtos = dao.listar(txtVenderProduto.getText());
         return produtos;
     }*/
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -140,13 +136,20 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = txtVenderProduto.getText();
 
-        ProdutosDAO produtosdao = new ProdutosDAO();
+        // Obtendo o ID do produto do campo de texto
+        ProdutosDAO dao = new ProdutosDAO();
 
-        produtosdao.venderProdutos(id);
+        // Criando um objeto da classe ProdutosDAO
+        dao.venderProdutos(id);
+
+        // Chamando o método venderProduto com o ID do produto
+        listarProdutos();
+
+        // Atualizando a lista de produtos
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        vendasVIEW vendas = new vendasVIEW(); 
+        vendasVIEW vendas = new vendasVIEW();
         vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
@@ -154,16 +157,16 @@ public class listagemVIEW extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
-    private void listarProdutos(){
+    private void listarProdutos() {
         try {
             ProdutosDAO produtosdao = new ProdutosDAO();
-            
+
             DefaultTableModel model = (DefaultTableModel) tblProdutos.getModel();
             model.setNumRows(0);
-            
+
             List<ProdutosDTO> lista = produtosdao.listarProdutos();
-            
-            for(int i = 0; i < lista.size(); i++){
+
+            for (int i = 0; i < lista.size(); i++) {
                 model.addRow(new Object[]{
                     lista.get(i).getId(),
                     lista.get(i).getNome(),
@@ -173,10 +176,9 @@ public class listagemVIEW extends javax.swing.JFrame {
             }
         } catch (Exception e) {
         }
-    
+
     }
-    
-    
+
     /**
      * @param args the command line arguments
      */
