@@ -16,6 +16,7 @@ public class ProdutosDAO {
     ResultSet resultset;
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
 
+
     public int cadastrarProduto(ProdutosDTO produto) {
         ProdutosDTO dto = new ProdutosDTO();
         conectaDAO dao = new conectaDAO();
@@ -43,8 +44,6 @@ public class ProdutosDAO {
             prep = conn.prepareStatement("DELETE FROM produtos WHERE id = ?");
             prep.setString(1, id);
             prep.executeUpdate();
-            String status = "A Venda";
-
             return true;
         } catch (SQLException ex) {
             return false;

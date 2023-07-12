@@ -14,7 +14,6 @@ public class conectaDAO {
     ResultSet rs;
 
    public Connection connectDB(){
-        Connection conn = null;
         
         try {
             
